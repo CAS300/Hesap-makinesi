@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70vh;
+        margin: 0;
+        background-color: white;
+    }
+
+    .solar-panel {
+    width: 100%;
+    height: 20px;
+    background-color: #222;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    }
+
+    .content {
+        background-color: gray;
+        padding: 20px;
+        border: 5px solid;
+        border-color: rgb(58, 58, 58);
+        border-radius: 12%;
+        max-width: 60vw;
+    }
+
+
+    #display{
+        
+        display: block;
+        overflow: auto; 
+        white-space: nowrap;
+        margin: 10px auto;
+        width: 200px;
+        font-size: 2rem;
+        text-align: right;
+        padding: 10px;
+        border: 1px solid #aaa;
+        background-color: aqua;
+    }
+    table{
+        margin: 0 auto;
+    }
+    button{
+        background-color: rgb(207, 207, 81);
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+        margin: 2px;
+        border-radius: 20%;
+    }
+</style>
+    <title>Hesap Makinesi</title>
+</head>
+<body>
+    <div class="content">
+        <h1>/////////////</h1>
+        <output id="display">0</output>
+        <table>
+            <tr>
+                <td><button class="function" value="sqrt">√</button></td>
+                <td><button class="function" value="^2">x²</button></td>
+                <td><button class="function" value="C">C</button></td>
+                <td><button class="function" value="back">🔙</button></td>
+            </tr>
+            <tr>
+                <td><button class="number" value="7">7</button></td>
+                <td><button class="number" value="8">8</button></td>
+                <td><button class="number" value="9">9</button></td>
+                <td><button class="operator" value="/">÷</button></td>
+            </tr>
+            <tr>
+                <td><button class="number" value="4">4</button></td>
+                <td><button class="number" value="5">5</button></td>
+                <td><button class="number" value="6">6</button></td>
+                <td><button class="operator" value="*">x</button></td>
+            </tr>
+            <tr>
+                <td><button class="number" value="1">1</button></td>
+                <td><button class="number" value="2">2</button></td>
+                <td><button class="number" value="3">3</button></td>
+                <td><button class="operator" value="-">-</button></td>
+            </tr>
+            <tr>
+                <td><button class="function" value=",">,</button></td>
+                <td><button class="number" value="0">0</button></td>
+                <td><button class="function" value="=">=</button></td>
+                <td><button class="operator" value="+">+</button></td>
+            </tr>
+        </table>
+
+        <script>
+            const numberButtons = document.querySelectorAll(".number");
+            const operatorButtons = document.querySelectorAll(".operator");
+            const functionButtons = document.querySelectorAll(".function");
+            const display = document.getElementById("display");
+            
+            let index='';
+
+            numberButtons.forEach(button => {
+                button.addEventListener("click", () => {   
+                    index+=button.value;
+                    display.textContent=index;
+                });
+            
+            });
+            operatorButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    if (/[+\-*/]$/.test(index)) {
+                        index = index.slice(0, -1) + button.value;
+                    } else {
+                        index += button.value;
+                    }
+
+                    display.textContent=index;
+                });
+            
+            });
+            
+            functionButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    if (button.value==="C"){
+                        index="";
+                        display.textContent="0";
+                    }
+                    else if (button.value==="="){
+                        let sonuc=eval(index)
+                        display.textContent=index+'='+sonuc
+                        index=sonuc;
+                    }
+                    else if (button.value===","){
+                        if (index.length===0){
+                            index+='0.'
+                            display.textContent=index
+                        }else if (index.length>1){
+                            index+='.'
+                                display.textContent=index}
+                    }
+                    else if (button.value==="back"){
+                        index = index.toString();
+                        index=index.slice(0, -1);
+                        if (index.length>=1)
+                            display.textContent=index
+                        else if (index.length<1)
+                            display.textContent='0'
+                    }
+                    else if (button.value==="sqrt"){
+                        let sonuc= Math.sqrt(eval(index));
+                        display.textContent='√'+index+' = '+sonuc
+                        index=sonuc;
+                    }
+                    else if (button.value==="^2"){
+                        let sonuc="";
+                        sonuc=index+'**2';
+                        sonuc=eval(sonuc)
+                        display.textContent=index+'^2='+sonuc
+                        index=sonuc;
+                    }
+                });
+            });
+            
+        </script>
+    </div>
+</body>
+</html>
